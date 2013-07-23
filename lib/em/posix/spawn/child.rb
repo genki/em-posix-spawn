@@ -85,13 +85,13 @@ module EventMachine
 
           def self.instance
             @instance ||= begin
-                            new.tap { |instance|
-                              prev_handler = Signal.trap("CLD") {
-                                EM.add_timer(0) { instance.signal }
-                                prev_handler.call if prev_handler
-                              }
-                            }
-                          end
+              new.tap { |instance|
+                prev_handler = Signal.trap("CLD") {
+                  EM.add_timer(0) { instance.signal } if EM.reactor_running?
+                  prev_handler.call if prev_handler
+                }
+              }
+            end
           end
 
           def initialize
