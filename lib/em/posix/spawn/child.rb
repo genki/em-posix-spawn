@@ -144,7 +144,7 @@ module EventMachine
               @prev_handler.call
             end
 
-            @prev_handler = nil if @prev_handler.respond_to? :call
+            @prev_handler = nil unless @prev_handler.respond_to? :call
             @prev_handler ||= lambda { |*_| ; }
           end
 
